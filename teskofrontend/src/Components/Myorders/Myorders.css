@@ -1,0 +1,138 @@
+.maincontainer1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+.ordercontainer1{
+    display: flex;
+    justify-content:center;
+    flex-direction: column;
+    width:98%;
+    align-items: space-evenly;
+    border-radius:px;
+    padding:10px 10px;
+    outline:none;
+    margin:10px;
+    border:1px solid #e2e9e1;
+    gap:10px;
+}
+.productcontainer1{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    justify-items: flex-start;
+    width:98%;
+    align-items:flex-start;
+    align-content: flex-start;
+    border-radius:2px;
+    padding:10px 10px;
+    outline:none;
+    margin:10px;
+    border:1px solid #e2e9e1;
+}
+.productdetail1{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width:240px;
+    height:157px;
+    border-radius:2px;
+    padding:10px 20px;
+    outline:none;
+    margin:10px;
+    border:1px solid #e2e9e1;
+}
+.productimage1 img{
+    width:80px; 
+}
+.productdata{
+    font-size: 10px;
+    align-self: center;
+    align-content: center;
+   
+}
+.productdata ul{
+    font-size: 10px;
+    list-style-type: none;
+    align-self: center;
+    align-content: center;
+    padding-left: 10px !important;
+    
+}
+.productdata ul li{
+    font-size: 10px;
+    list-style-type: none;
+    align-self: center;
+    align-content: center;
+}
+.orderinfo1{
+    display: flex;
+    justify-content: space-evenly;
+    width:98%;
+    border-radius:2px;
+    padding:10px 10px;
+    outline:none;
+    margin:10px;
+    border:1px solid #e2e9e1;
+    gap:10px;
+}
+.orderinfo11{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:3%;
+    border-radius:2px;
+    padding:10px 10px;
+    outline:none;
+    margin:10px;
+    border:1px solid #e2e9e1;
+}
+.orderinfo1 table{
+    border-collapse:collapse;
+    width:100%;
+    margin-bottom:20px;
+}
+.orderinfo1 ul li{
+    align-content: center;
+    font-size: 12px;
+    list-style-type: none;
+}
+
+.orderinfo1  table td{
+    width:20%;
+    border:1px solid #e2e9e1;
+    padding:5px;
+    font-size:11px;
+}
+.orderinfo1 ul{
+    padding-left: 15px !important;
+}
+.buutt{
+    background-color: rgb(159, 161, 161);
+
+    padding:10px 5px;
+}
+@media(max-width:1000px){
+    .orderinfo1{
+        display: flex;
+        flex-direction: column;
+
+    }
+  }
+ @media(max-width:880px){
+
+  
+  }
+  @media(max-width:550px){
+    .productcontainer1{
+        display: flex;
+        justify-content: center;
+        justify-items: center;
+        align-items:center;
+        align-content: center;
+;
+    }
+    
+  }

@@ -1,0 +1,21 @@
+.mainimg{
+   
+    object-fit: cover;
+    background-image:linear-gradient(rgba(0,0,0,0.15),rgba(0,0,0,0.15));
+}
+.cimg{
+    width:100%;
+    height:80vh;
+    object-fit: cover;
+}
+
+@media(max-width:1280px){
+}
+@media(max-width:1024px){
+  
+}
+@media(max-width:800px){
+  
+}
+@media(max-width:500px){
+}

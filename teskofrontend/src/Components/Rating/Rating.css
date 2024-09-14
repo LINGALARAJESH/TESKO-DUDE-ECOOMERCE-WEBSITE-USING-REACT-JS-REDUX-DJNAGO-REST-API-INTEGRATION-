@@ -1,0 +1,9 @@
+.starr{
+    display: flex;
+    justify-content:flex-start;
+    gap:4px;
+}
+.starr i{
+    color:gold;
+    font-size: 20px;
+}

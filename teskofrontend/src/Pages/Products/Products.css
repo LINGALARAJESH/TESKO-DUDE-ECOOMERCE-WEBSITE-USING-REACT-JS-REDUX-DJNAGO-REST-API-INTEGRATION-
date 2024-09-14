@@ -1,0 +1,12 @@
+.productdata{
+    display:flex;
+    width:100%;
+    flex-direction: row;
+
+}
+.productasidecontent{
+    display: flex;
+    flex-direction: column;
+    width:100%;
+    margin-top:40px;
+}

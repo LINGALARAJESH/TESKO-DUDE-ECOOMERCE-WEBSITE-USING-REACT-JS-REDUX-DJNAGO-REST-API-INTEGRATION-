@@ -1,0 +1,139 @@
+.pro h1{
+    font-size: 17px;
+    line-height: 20px;
+    color:#222;
+}
+.pro h2{
+    font-size: 15px;
+    line-height: 16px;
+    color:#222;
+}
+.pro h4{
+    font-size: 13px;
+    color:#222;
+}
+.pro h6{
+    font-size: 10px;
+   font-weight:600;
+}
+.pro p{
+    font-size: 12px;
+    color:#465b52;
+    margin: 10px 0 10px 0;
+}
+.section-p1{
+    padding:20px 80px;
+}
+.section-m1{
+    margin:40px 0;
+}
+.pro button.normal{
+    font-size: 14px;
+    font-weight: 600;
+    padding:15px 30px;
+    color:#000;
+    background-color:#fff;
+    border-radius: 4px;
+    cursor:pointer;
+    border:none;
+    outline:none;
+    transition:0.2s;
+}
+.pro button.white{
+    font-size: 13px;
+    font-weight: 600;
+    padding:11px 18px;
+    color:#fff;
+    background-color:transparent;
+    cursor:pointer;
+    border:1px solid #fff;
+    outline:none;
+    transition:0.2s;
+}
+#product1{
+    text-align: center;
+}
+.pro {
+    min-width: 240px;
+    padding: 10px 12px;
+    max-width: 240px;
+    border: 1px solid #cce7d0;
+    border-radius: 2px;
+    cursor: pointer;
+    box-shadow: 20px 20px 30px rgba(0,0,0,0.02);
+    margin: 15px 0;
+    transition: 0.2s ease;
+    position: relative;
+    justify-self: center;
+}
+ .pro:hover{
+    box-shadow: 20px 20px 30px rgba(0,0,0,0.06);
+}
+.pro img{
+   width:100%;
+   height: 350px;
+   border-radius:2px;
+   object-fit:cover;
+   transition: 0.5s;
+}
+.pro img:hover{
+    box-shadow: 10px 10px 10px gray;
+    width:110%;
+ }
+ .pro .dis{
+   text-align:start;
+   padding:1px 0;
+}
+.pro .dis span{
+    color:#606063;
+    font-size:12px;
+}
+.pro .dis h5{
+    padding-top:4px;
+    color:#1a1a1a;
+    font-size:14px;
+    margin:0
+}
+.pro .dis i{
+    font-size:12px;
+    color:rgb(243,181,25);
+    text-shadow: none;
+}
+.pro .dis h4{
+     padding-top: 2px;
+     font-size:15px;
+     font-weight:700;
+     color:#088178;
+     margin-bottom: 2px;
+}
+.pro .dis h4 i{
+    font-size:12px;
+    color:#088178;
+}
+.pro .butt a i{
+ 
+   background-color:#e8f6ea ;
+   color:#088178;
+   border-radius:50px;
+   border:1px solid #cce7d0;
+   font-size: 15px; 
+   padding:10px;
+}
+.pro .butt a{
+    display: flex;
+    align-items: center;
+    
+}
+.pro h4 span{
+    color:#666;
+    font-size: 15px;
+    text-decoration: line-through;
+}
+.butt{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.pro h4 i{
+    color:#088178;
+}
