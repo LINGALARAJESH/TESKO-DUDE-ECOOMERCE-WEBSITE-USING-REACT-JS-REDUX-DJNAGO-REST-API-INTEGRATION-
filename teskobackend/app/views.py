@@ -156,7 +156,7 @@ def registerUser(request):
         message=render_to_string(
             "activate.html",
            {'user':user,
-            'domain':"https://teskoodude.pythonanywhere.com/",
+            'domain':"127.0.0.1:8000",
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token':generate_token.make_token(user)
            }
@@ -183,7 +183,7 @@ def resetinfo(request,email):
         message=render_to_string(
                 "rest-user-password.html",
                 {   'user':user,
-                    'domain':"https://lingalarajesh.github.io/teskofrontend/#",
+                    'domain':"localhost:3000",
                     'uid': urlsafe_base64_encode(force_bytes(user[0].pk)),
                     'token':generate_token.make_token(user[0])
                 }
