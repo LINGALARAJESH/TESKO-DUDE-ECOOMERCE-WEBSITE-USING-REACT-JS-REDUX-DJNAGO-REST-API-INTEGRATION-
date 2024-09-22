@@ -6,11 +6,18 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView
 )
 
-urlpatterns = [   
+urlpatterns = [
 
-    path("/",views.getRoutes,name="getRoutes"),
+    path('', views.home, name='home'),
     path("products/",views.getProducts,name="getProducts"),
     path("products/<str:pk>",views.getProduct,name="getProduct"),
+
+    path("orders/",views.getOrders,name="getOrders"),
+    path("orderitems/",views.getOrderitems,name="getOrderitems"),
+    path("shippingaddress/",views.getShippingaddress,name="getShippingaddress"),
+    path("cartdetails/",views.getCartdetails,name="getCartdetails"),
+    path("transactiondetails/",views.getTransdetails,name="getTranstdetails"),
+
     path('users/', views.getUsers, name='getUsers'),
     path('users/login/',  views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('users/profile/',views.getUserProfiles, name='getUserProfiles'),
@@ -19,7 +26,7 @@ urlpatterns = [
     path('users/addcartdata/',views.Addcartdata,name='Addcartdata'),
     path('users/addcartdata/<userid>/<productId>',views.Delcartdata,name='Delcartdata'),
     path('users/addcartdata/<userid>',views.getcartdata,name='getcartdata'),
-    path("activate/<uidb64>/<token>",views.ActivateAccountView.as_view(),name="activate"), 
+    path("activate/<uidb64>/<token>",views.ActivateAccountView.as_view(),name="activate"),
     path('users/shippingcartdata/',views.ShippingCartData,name='ShippingCartData'),
     path('users/proceedcartorder/',views.ProceedCartOrder,name='ProceedCartOrder'),
     path('users/proceedcartorder/<int:pk>/', views.order_detail_update, name='order-detail-update'),

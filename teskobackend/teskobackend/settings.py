@@ -119,7 +119,7 @@ ROOT_URLCONF = 'teskobackend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ["templates"],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -186,17 +186,24 @@ USE_I18N = True
 USE_TZ = True
 
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS=[
-    BASE_DIR/'static'
+# STATICFILES_DIRS=[
+#     BASE_DIR/'static'
+# ]
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # global static folder
 ]
+
+
 MEDIA_ROOT='static/images'
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 #Razorpay
 ROZORPAY_KEY_ID = os.environ.get('KEY')

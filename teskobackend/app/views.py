@@ -4,12 +4,12 @@ from .models import Product
 from .models import User
 from .models import Order
 from .models import ShippingAddress
+from .models import Transaction
 from .models import CartItems
 from .models import OrderItem
 from django.views.generic import View
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializer import ProductSerializer,UserSerializer,UserSerializerWithToken,CartItemsSerializer,OrderSerializer, ShippingAddressSerializer,OrderItemSerializer,CreateOrderSerializer,TransactionModelSerializer
+from .serializer import ProductSerializer,UserSerializer,UserSerializerWithToken,CartItemsSerializer,OrderSerializer, ShippingAddressSerializer,OrderItemSerializer,CreateOrderSerializer,TransactionModelSerializer,TransactionModelAllSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
@@ -17,7 +17,7 @@ from rest_framework.decorators import api_view,permission_classes
 from django.contrib.auth.hashers import make_password
 from rest_framework import status
 
-#To Activate user Account 
+#To Activate user Account
 from django.contrib.sites.shortcuts import get_current_site #to get the current url of site.
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode# for decoding and encoding the strings.
 from django.urls import NoReverseMatch,reverse #check the reverse match.
@@ -28,15 +28,15 @@ from .utils import TokenGenerator,generate_token
 #Emails
 from django.core.mail import send_mail,EmailMultiAlternatives#send the mail
 from django.core.mail import BadHeaderError #When error occurs we use it.
-from django.core import mail 
+from django.core import mail
 from django.conf import settings# to give a host mail  data
 from django.core.mail import EmailMessage
 import threading
 #Razorpay payment
 from .main import RazoraypayClient
+from rest_framework.exceptions import ValidationError
 #payment paypal
 from paypalrestsdk import Payment
-from rest_framework.response import Response
 from rest_framework.views import APIView
 import paypalrestsdk
 from django.views.decorators.csrf import csrf_exempt
@@ -56,10 +56,10 @@ class EmailThread(threading.Thread):
     def run(self):
         self.email_message.send()
 
-
-@api_view(['GET'])
-def getRoutes(request):
-    return Response("Hello")
+# New
+def home(request):
+    return render(request, 'home.html')
+#New
 
 @api_view(['GET'])
 def getProducts(request):
@@ -73,6 +73,39 @@ def getProduct(request,pk):
     serializer=ProductSerializer(product,many=False)
     return Response(serializer.data)
 
+#New
+@api_view(['GET'])
+def getOrders(request):
+    orders=Order.objects.all()
+    serializer=OrderSerializer(orders,many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def getOrderitems(request):
+    ordersitem=OrderItem.objects.all()
+    serializer=OrderItemSerializer(ordersitem,many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def getShippingaddress(request):
+    shippingAddress=ShippingAddress.objects.all()
+    serializer=ShippingAddressSerializer(shippingAddress,many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def getCartdetails(request):
+    cartitem=CartItems.objects.all()
+    serializer=CartItemsSerializer(cartitem,many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def getTransdetails(request):
+    Trans=Transaction.objects.all()
+    serializer=TransactionModelAllSerializer(Trans,many=True)
+    return Response(serializer.data)
+
+#New
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self,attrs):
         data=super().validate(attrs)
@@ -81,7 +114,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             data[k]=v
         return data
 
-class MyTokenObtainPairView(TokenObtainPairView): 
+class MyTokenObtainPairView(TokenObtainPairView):
       serializer_class=MyTokenObtainPairSerializer
 
 
@@ -107,6 +140,7 @@ def getUsers(request):
 @api_view(['POST'])
 def registerUser(request):
     data=request.data
+    print(data)
     try:
         user=User.objects.create(
         first_name=data['fname'],
@@ -122,12 +156,13 @@ def registerUser(request):
         message=render_to_string(
             "activate.html",
            {'user':user,
-            'domain':"127.0.0.1:8000",
+            'domain':"https://teskoodude.pythonanywhere.com/",
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token':generate_token.make_token(user)
            }
         )
 
+        print("email_subject='Activate Your Account'")
 
         email_message=EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[data['email']])
         EmailThread(email_message).start()
@@ -148,22 +183,22 @@ def resetinfo(request,email):
         message=render_to_string(
                 "rest-user-password.html",
                 {   'user':user,
-                    'domain':"localhost:3000",
+                    'domain':"https://lingalarajesh.github.io/teskofrontend/#",
                     'uid': urlsafe_base64_encode(force_bytes(user[0].pk)),
                     'token':generate_token.make_token(user[0])
                 }
-                    
+
                 )
         email_message=EmailMessage(email_subject,message,settings.EMAIL_HOST_USER,[email])
         EmailThread(email_message).start()
         return Response("Please Rest your Account password via Email...")
-        
+
     else:
          return Response("Error")
 
 
 
-@api_view(['POST'])     
+@api_view(['POST'])
 def SetNewpasswordView(request,uidb64,token):
         data=request.data
         context={
@@ -175,9 +210,9 @@ def SetNewpasswordView(request,uidb64,token):
 
         if password!=conf_password:
             return Response("Password not matched")
-           
+
         try:
-       
+
             user_id =force_str(urlsafe_base64_decode(uidb64))
             user=User.objects.get(pk=user_id)
             user.set_password(password)
@@ -186,11 +221,11 @@ def SetNewpasswordView(request,uidb64,token):
 
         except DjangoUnicodeDecodeError  as identifier:
             return Response( messages.error(request,"something went wrong"))
-            
+
 # Activate Account
 class ActivateAccountView(View):
     def get(self,request,uidb64,token):
-        try: 
+        try:
             uid =force_str(urlsafe_base64_decode(uidb64))
             user=User.objects.get(pk=uid)
         except Exception as identifier:
@@ -290,10 +325,10 @@ def ShippingCartData(request):
             country=data['country'],
             shippingPrice=data['shippingprice'],
         )
-        
+
         shippingdata.save()
         updateddata = ShippingAddress.objects.filter(order=order)
-        serializer = ShippingAddressSerializer(updateddata, many=True)  
+        serializer = ShippingAddressSerializer(updateddata, many=True)
         return Response(serializer.data)
 
     except Order.DoesNotExist:
@@ -332,7 +367,7 @@ def ProceedCartOrder(request):
         return Response({'status': 'error', 'message': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({'details': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        
+
 
 
 @api_view(['POST'])
@@ -395,7 +430,7 @@ def create_payment(request):
                 "cancel_url": "http://localhost:3000/payment-cancel"
             }
         })
-       
+
 
         if payment.create():
             for link in payment.links:
@@ -408,7 +443,7 @@ def create_payment(request):
 @csrf_exempt
 def execute_payment(request):
     if request.method == "POST":
-       
+
         payment_id = request.POST.get('paymentID')
         payer_id = request.POST.get('payerID')
 
@@ -419,32 +454,53 @@ def execute_payment(request):
         else:
             return JsonResponse({"error": payment.error}, status=500)
 
+
 rz_client=RazoraypayClient()
 
 class CreateOrderAPIView(APIView):
     def post(self,request):
-        create_order_serializer=CreateOrderSerializer(
-            data=request.data
-        )
-       
+        create_order_serializer=CreateOrderSerializer(data=request.data)
         if create_order_serializer.is_valid():
-            order_response=rz_client.create_order(
-                    amount=create_order_serializer.validated_data.get("amount"),
-                    currency=create_order_serializer.validated_data.get("currency"),
-            )
-            response={
-                "status_code":status.HTTP_201_CREATED,
-                "message":"order_created",
-                "data":order_response
-            }
-            return Response(response,status=status.HTTP_201_CREATED)
+            amount = create_order_serializer.validated_data.get("amount")
+            currency = create_order_serializer.validated_data.get("currency")
+
+            print("Amount:", amount)
+            print("Currency:", currency)
+
+            try:
+                # Call the Razorpay client to create an order
+                order_response = rz_client.create_order(
+                    amount=amount,
+                    currency=currency,
+                )
+
+                response = {
+                    "status_code": status.HTTP_201_CREATED,
+                    "message": "order_created",
+                    "data": order_response
+                }
+                return Response(response, status=status.HTTP_201_CREATED)
+
+            except Exception as e:
+                # Log the exact error message for better debugging
+                print(f"Error while creating order: {str(e)}")
+                response = {
+                    "status_code": status.HTTP_400_BAD_REQUEST,
+                    "message": "Error creating order",
+                    "error": str(e)
+                }
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
         else:
-            response={
-                "status_code":status.HTTP_400_BAD_REQUEST,
-                "message":"bad request",
-                "error":create_order_serializer.errors
+            # If serializer validation fails
+            response = {
+                "status_code": status.HTTP_400_BAD_REQUEST,
+                "message": "Bad request",
+                "error": create_order_serializer.errors
             }
-            return Response(response,status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 class TransactionAPIView(APIView):
@@ -452,7 +508,7 @@ class TransactionAPIView(APIView):
         transaction_serializer=TransactionModelSerializer(
             data=request.data
         )
-       
+
         if transaction_serializer.is_valid():
             rz_client.verify_payment(
                 razorpay_order_id = transaction_serializer.validated_data.get("order_id"),
@@ -479,11 +535,11 @@ def order_detail_update(request, pk):
     try:
         order = Order.objects.get(pk=pk)
     except Order.DoesNotExist:
-        return Response({'detail': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)  
-        
+        return Response({'detail': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
+
     if request.method == 'GET':
-        updateddata = Order.objects.filter(user=order.user) 
-      
+        updateddata = Order.objects.filter(user=order.user)
+
         serializer = OrderSerializer(updateddata, many=True)
         return Response(serializer.data)
 
@@ -493,7 +549,7 @@ def order_detail_update(request, pk):
             serializer.save()
 
             updateddata = Order.objects.filter(pk=pk)
-           
+
             serializer = OrderSerializer(updateddata, many=True)
             return Response(serializer.data)
 

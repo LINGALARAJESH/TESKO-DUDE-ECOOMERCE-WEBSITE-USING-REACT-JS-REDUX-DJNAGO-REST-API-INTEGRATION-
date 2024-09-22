@@ -14,6 +14,7 @@ class ProductSerializer(serializers.ModelSerializer):
         model=Product
         fields="__all__"
 
+
 class UserSerializer(serializers.ModelSerializer): 
     name=serializers.SerializerMethodField(read_only=True)
     _id=serializers.SerializerMethodField(read_only=True)
@@ -76,11 +77,19 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model=OrderItem
         fields="__all__"
 
+class TransactionModelAllSerializer(serializers.ModelSerializer): 
+     class Meta: 
+        model=Transaction
+        fields= "__all__"
+
+
 class CreateOrderSerializer(serializers.Serializer):
         amount=serializers.IntegerField()
         currency=serializers.CharField()
 
+
+
 class TransactionModelSerializer(serializers.ModelSerializer): 
      class Meta: 
         model=Transaction
-        fields=fields = ["payment_id", "order_id", "signature", "amount"]
+        fields= ["payment_id", "order_id", "signature", "amount"]
